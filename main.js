@@ -5,15 +5,26 @@ async function init() {
     try {
         let user = Moralis.User.current();
         if(!user){ 
-            $("#login_button").click(async ()=> {
-                user = await Moralis.Web3.authenticate();
+            $("#login_button").click( async ()=> {
+                user = await Moralis.Web3.authenticate().then(renderGame());
+                console.log(user);
             })
+            
+            
         }
-        renderGame();
+        
+      
     } catch (error) {
         console.log(error);
     }
 }
+async function logOut() {
+    await Moralis.User.logOut();
+    $("#login_button").show();
+    $("#logo1").show();
+    $("#game").hide();
+    console.log("logged out");
+  }
 
 function renderGame(){
     $("#game").show();
@@ -23,5 +34,6 @@ function renderGame(){
 }
 
 init();
+document.getElementById("btn-logout").onclick = logOut;
 
 
