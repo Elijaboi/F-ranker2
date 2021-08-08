@@ -43,3 +43,9 @@ body{
     display: block;
     width: 200%;
   }
+  #game{
+    display: none;
+  }
+  /*#pet_img{
+    width: 300px;
+  }*/
