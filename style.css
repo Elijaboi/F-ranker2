@@ -36,16 +36,42 @@ body{
   .btn:focus {
     outline: none;
   }
-  .btn:active {
-    
-  }
   .btn-block {
     display: block;
     width: 200%;
   }
   #game{
     display: none;
+    position: relative;
+    left:20%;
+    margin-top: 100px;
+
+    
+    
   }
-  /*#pet_img{
-    width: 300px;
-  }*/
+  
+  .btn2 {
+    border: 2px solid #d4af37;
+ display:block;
+position:relative;
+left:25%;
+
+background-color: transparent;
+color: white;
+padding: 14px 28px;
+font-size: 16px;
+text-shadow: black 2px 2px;
+}
+.btn2-block {
+ display: block;
+ width: 200%;
+}
+  #pet_img:hover {
+    transition: 0.7s ease;
+    opacity: .5
+  }
+  #market:hover {
+    transition: 0.7s ease;
+    opacity: .5
+  }
+  
