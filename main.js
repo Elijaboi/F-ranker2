@@ -4,15 +4,16 @@ Moralis.serverURL = "https://xvndizkxt57v.moralisweb3.com:2053/server"; //Server
 async function init() {
     try {
         let user = Moralis.User.current();
-        if(!user){ 
-            $("#login_button").click( async ()=> {
-                user = await Moralis.Web3.authenticate().then(renderGame());
-                console.log(user);
-            })
+        console.log(user);
+        if(user=null){ 
+                $("#login_button").click(async () => {user =await Moralis.Web3.authenticate();
+                    console.log( "You clicked a paragraph!" );
+                } )
+                
             
-            
+             
         }
-        
+        renderGame();
       
     } catch (error) {
         console.log(error);
