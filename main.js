@@ -40,6 +40,7 @@ init();
 document.getElementById("btn-logout").onclick = logOut;
 
 async function putmeta(){
+  console.log("putmeta run");
 const meta = {
     "image":"",
     "description":"Ngannou vs Jones 1",
