@@ -47,6 +47,7 @@ const meta = {
     "name": "Francis Ngannou"
 }
 const file = new Moralis.File("file.json", {base64 : btoa(JSON.stringify(meta))});
-console.log(file.ipfs());
 await file.saveIPFS();
+console.log(file.ipfs());
+
 }
