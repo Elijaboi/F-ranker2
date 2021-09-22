@@ -42,7 +42,7 @@ document.getElementById("btn-logout").onclick = logOut;
 async function putmeta(){
   console.log("putmeta run");
 const meta = {
-    "image":"",
+    "image":"https://ipfs.moralis.io:2053/ipfs/QmVDd5TmK5zN3H7RRWwwNLEW9uTW61TnD4B3FdfjSojyvd",
     "description":"Ngannou vs Jones 1",
     "name": "Francis Ngannou"
 }
