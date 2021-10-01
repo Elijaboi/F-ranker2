@@ -16,7 +16,8 @@
   },
   "homepage": "https://github.com/Elijaboi/F-ranker2#readme",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.3.2"
+    "@openzeppelin/contracts": "^4.3.2",
+    "@truffle/hdwallet-provider": "^1.5.0"
   },
   "description": ""
 }
