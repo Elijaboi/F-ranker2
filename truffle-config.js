@@ -18,10 +18,16 @@
  *
  */
 
- const HDWalletProvider = require('@truffle/hdwallet-provider');
+ //const HDWalletProvider = require('@truffle/hdwallet-provider');
+ require('dotenv').config();
+var HDWalletProvider = require("truffle-hdwallet-provider");
+//var mnemonic = "orphan blur library music create dump destroy shallow kind float warrior badge";
+var tokenKey = process.env["ENDPOINT_KEY"];
 
  const fs = require('fs');
  const mnemonic = fs.readFileSync(".secret").toString().trim();
+ //const fs = require('fs');
+ //const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
   /**
@@ -41,6 +47,7 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
+
     // development: {
     //  host: "127.0.0.1",     // Localhost (default: none)
     //  port: 8545,            // Standard Ethereum port (default: none)
@@ -57,6 +64,10 @@ module.exports = {
     // },
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
+    rinkeby: {
+      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/662b97f253b143168b24926d3ca10219`),
+      network_id: 4
+      }
     // ropsten: {
     // provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/YOUR-PROJECT-ID`),
     // network_id: 3,       // Ropsten's id
