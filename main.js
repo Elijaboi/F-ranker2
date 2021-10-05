@@ -51,6 +51,7 @@ async function NFTMarket(){
 }
 
 function renderInventory(NFTs){
+  const parent =document.getElementById("app1")
   for (let i = 0; i < NFTs.length; i++) {
     const element = NFTs[i];
     let htmlString = `<div class="card" style="width: 18rem;">
@@ -61,8 +62,8 @@ function renderInventory(NFTs){
       <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
   </div>`
-  let col = document.createElement("NFTdisp");
-  col.className = "col col-md-3"
+  let col = document.createElement("div");
+  col.className = "col col-md-3";
   col.innerHTML = htmlString;
     
   }
