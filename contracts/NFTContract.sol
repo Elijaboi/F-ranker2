@@ -7,7 +7,7 @@ contract NFTContract is ERC1155, Ownable{
     uint256 public constant FighterFiteCard = 0;
     uint256 public constant FighterCard = 1;
 
-    constructor() ERC1155("https://xvndizkxt57v.moralisweb3.com/{id}.json")
+    constructor() ERC1155("https://cr7ge1kve9u7.moralishost.com/{id}.json")
     {
         _mint(msg.sender,FighterFiteCard,1,"");
         _mint(msg.sender,FighterCard,2,"");
