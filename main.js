@@ -61,7 +61,7 @@ function renderInventory(NFTs){
       <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
   </div>`
-  let col = document.createElement("div");
+  let col = document.createElement("NFTdisp");
   col.className = "col col-md-3"
   col.innerHTML = htmlString;
     
