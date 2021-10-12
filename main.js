@@ -55,17 +55,18 @@ console.log(nft.metadata);
   return Promise.all(promises);
 }
 function renderInventory(NFTs){
-  console.log(NFTs)
+
   const parent =document.getElementById("app1");
   
   for (let i = 0; i < NFTs.length; i++) {
    // console.log("renderinventy");
     let nft = NFTs[i];
+   // console.log(nft.metadata);
     let htmlString = `<div class="card" style="width: 18rem;">
-    <img class="card-img-top" src="${nft.metadata.image}" alt="Card image cap">
+    <img class="card-img-top" src="${nft.metadata.result.data.image}" alt="Card image cap">
     <div class="card-body">
-      <h5 class="card-title">${nft.metadata.name}</h5>
-      <p class="card-text">${nft.metadata.description}</p>
+      <h5 class="card-title">${nft.metadata.result.data.name}</h5>
+      <p class="card-text">${nft.metadata.result.data.description}</p>
       <a href="#" class="btn btn-primary">Go somewhere</a>
     </div>
   </div>`
