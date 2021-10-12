@@ -1,6 +1,4 @@
-Moralis.initialize("EcXFhXVLhnGqUZNx9h8IyhtbZfwZCHYKbyIIlcZ3"); // Application id from moralis.io
-Moralis.serverURL = "https://cr7ge1kve9u7.moralishost.com:2053/server"; //Server url from moralis.io
-
+Moralis.start({ serverUrl: "https://cr7ge1kve9u7.moralishost.com:2053/server", appId: "EcXFhXVLhnGqUZNx9h8IyhtbZfwZCHYKbyIIlcZ3" });
 async function init() {
   let user = Moralis.User.current();
   console.log(user);
@@ -35,7 +33,7 @@ function renderGame(){
 
 }
 
-function fetchNFTMetadata(NFTs){
+async function fetchNFTMetadata(NFTs){
   $("#btn-logout").show(); 
   let promises = [];
   for (let i = 0; i < NFTs.length; i++) {
@@ -46,22 +44,22 @@ function fetchNFTMetadata(NFTs){
 promises.push(
   fetch("https://cr7ge1kve9u7.moralishost.com:2053/server/functions/getNFT?_ApplicationId=EcXFhXVLhnGqUZNx9h8IyhtbZfwZCHYKbyIIlcZ3&nftId=" + id)
 // then(res => res.json())
-//then(res => JSON.parse(res.result))
+//.then(res => JSON.parse(res.result))
 .then(res => res.json())
 //.then(res => JSON.parse(res.result))
-.then(res => console.log(res.result.data))
+//.then(res => console.log(res.result.data))
 .then(res =>(nft.metadata = res))
 .then(()=>{return nft;}))
-    
+console.log(nft.metadata);   
   }
   return Promise.all(promises);
 }
 function renderInventory(NFTs){
-  
+  console.log(NFTs)
   const parent =document.getElementById("app1");
   
   for (let i = 0; i < NFTs.length; i++) {
-    console.log("renderinventy");
+   // console.log("renderinventy");
     let nft = NFTs[i];
     let htmlString = `<div class="card" style="width: 18rem;">
     <img class="card-img-top" src="${nft.metadata.image}" alt="Card image cap">
@@ -89,11 +87,11 @@ async function NFTMarket(){
 //const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
  // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
   
-  console.log(NFTs);
+  //console.log(NFTs);
   ///console.log(tokenMetadata.result);
-  fetchNFTMetadata(NFTs.result);
+  let NFTmeta = await fetchNFTMetadata(NFTs.result);
   $("#NFTdisp").show(); 
-  renderInventory(NFTs);
+  renderInventory(NFTmeta);
   
   
 
