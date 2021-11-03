@@ -36,6 +36,7 @@ function renderGame(){
 async function fetchNFTMetadata(NFTs){
   $("#btn-logout").show(); 
   let promises = [];
+  console.log(NFTs.length)
   for (let i = 0; i < NFTs.length; i++) {
     let nft = NFTs[i];
     let id = nft.token_id;
