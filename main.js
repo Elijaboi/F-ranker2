@@ -36,7 +36,7 @@ function renderGame(){
 async function fetchNFTMetadata(NFTs){
   $("#btn-logout").show(); 
   let promises = [];
-  console.log(NFTs.length)
+  //console.log(NFTs.length)
   for (let i = 0; i < NFTs.length; i++) {
     let nft = NFTs[i];
     let id = nft.token_id;
@@ -84,14 +84,15 @@ async function NFTMarket(){
   $("#login_button").hide();
   $("#logo1").hide(); /*change this when routing*/
   
-  const options = { address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b", chain: "rinkeby" };
+  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
   let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
 //const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
  // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
   
-  //console.log(NFTs);
+  console.log(NFTs);
   ///console.log(tokenMetadata.result);
   let NFTmeta = await fetchNFTMetadata(NFTs.result);
+  //console.log(NFTmeta);
   $("#NFTdisp").show(); 
   renderInventory(NFTmeta);
   

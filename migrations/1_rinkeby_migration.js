@@ -1,4 +1,4 @@
-var NFTContract = artifacts.require("NFTContract");
+var NFTContract = artifacts.require("NFTContract1");
 module.exports = function(deployer, network, accounts) {
- deployer.deploy(NFTContract,{from: accounts[0]});
+ deployer.deploy(NFTContract1,{from: accounts[0]});
 };
