@@ -63,16 +63,12 @@ function renderInventory(NFTs){
    // console.log("renderinventy");
     let nft = NFTs[i];
    // console.log(nft.metadata);
-    let htmlString = `<div class="card" style="width: 18rem;">
+    let htmlString = `<div class="card" >
     <img class="card-img-top" src="${nft.metadata.result.data.image}" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">${nft.metadata.result.data.name}</h5>
-      <p class="card-text">${nft.metadata.result.data.description}</p>
       <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
   </div>`
   let col = document.createElement("div");
-  col.className = "col col-md-3";
+  col.className = "col col-md-3.5 mb-4 mt-4";
   col.innerHTML = htmlString;
   
   parent.appendChild(col);
@@ -94,20 +90,49 @@ async function NFTMarket(){
   let NFTmeta = await fetchNFTMetadata(NFTs.result);
   //console.log(NFTmeta);
   $("#NFTdisp").show(); 
-  renderInventory(NFTmeta);
-  
-  
-
-
+  renderInventory(NFTmeta);  
 }
 
-
-
+async function NFTMarket(){
+  $("#game").hide();
+  $("#login_button").hide();
+  $("#logo1").hide(); /*change this when routing*/
+  
+  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
+  let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
+//const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
+ // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
+  
+  console.log(NFTs);
+  ///console.log(tokenMetadata.result);
+  let NFTmeta = await fetchNFTMetadata(NFTs.result);
+  //console.log(NFTmeta);
+  $("#NFTdisp").show(); 
+  renderInventory(NFTmeta);  
+}
+async function NFTGame(){
+  $("#game").hide();
+  $("#login_button").hide();
+  $("#logo1").hide(); /*change this when routing*/
+  
+  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
+  let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
+//const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
+ // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
+  
+  console.log(NFTs);
+  ///console.log(tokenMetadata.result);
+  let NFTmeta = await fetchNFTMetadata(NFTs.result);
+  //console.log(NFTmeta);
+  $("#NFTdisp").show(); 
+  renderInventory(NFTmeta);  
+}
 
 
 init();
 
 document.getElementById("btn-logout").onclick = logOut;
 document.getElementById("market1").onclick = NFTMarket;
+document.getElementById("play").onclick = NFTGame;
 
 
