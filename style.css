@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
 .logo{
     background-size: contain;
     background-position: center;
@@ -27,51 +28,88 @@ body{
    left:50%;
    transform: translate(-50%,0);
   background-color: transparent;
+  
   color: white;
   padding: 14px 28px;
   font-size: 16px;
   text-shadow: black 2px 2px;
   cursor: pointer;
+ 
   }
-  .btn:focus {
+ 
+   .btn:focus {
     outline: none;
   }
   .btn-block {
     display: block;
     width: 200%;
-  }
+  } 
+ 
+    
   #game{
     display: none;
     position: relative;
     left:20%;
-    margin-top: 100px;
-
-    
+    margin-top: 100px;  
     
   }
   
   .btn2 {
     border: 2px solid #d4af37;
  display:block;
-position:relative;
-left:25%;
-
+position: absolute;
+left:50%;
+transform: translate(-50%,0);
 background-color: transparent;
+
 color: white;
 padding: 14px 28px;
 font-size: 16px;
 text-shadow: black 2px 2px;
+cursor: pointer;
+
 }
-.btn2-block {
+
+.btn2:focus {
+ outline: none;
+}
+.btn-block {
  display: block;
  width: 200%;
+} 
+
+.ggl2 {
+  /*border: 2px solid #d4af37;*/
+display:block;
+position: absolute;
+left:50%;
+transform: translate(-50%,0);
+background-color: transparent;
+color: red;
+padding: 14px 28px;
+font-size: 16px;
+text-shadow: black 2px 2px;
+cursor: pointer;
+animation: bump  0.3s infinite alternate ease-in-out;
 }
-  #pet_img:hover {
-    transition: 0.7s ease;
-    opacity: .5
+@keyframes bump {
+  100% {
+    top: -10px;
   }
-  #market:hover {
-    transition: 0.7s ease;
-    opacity: .5
-  }
-  
+}
+.ggl2:focus {
+outline: none;
+}
+.ggl-block {
+display: block;
+width: 200%;
+} 
+
+#play:hover {
+  transition: 0.7s ease;
+  opacity: .5
+}
+#market:hover {
+  transition: 0.7s ease;
+  opacity: .5
+}

@@ -65,7 +65,7 @@ function renderInventory(NFTs){
    // console.log(nft.metadata);
     let htmlString = `<div class="card" >
     <img class="card-img-top" src="${nft.metadata.result.data.image}" alt="Card image cap">
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+      <a href="#" class="ggl2">NEW CHALLENGER</a>
   </div>`
   let col = document.createElement("div");
   col.className = "col col-md-3.5 mb-4 mt-4";
@@ -128,11 +128,17 @@ async function NFTGame(){
   renderInventory(NFTmeta);  
 }
 
+async function Playgame(){
+  
+}
+
 
 init();
 
 document.getElementById("btn-logout").onclick = logOut;
 document.getElementById("market1").onclick = NFTMarket;
 document.getElementById("play").onclick = NFTGame;
+document.getElementById("ggl").onclick = Playgame;
+
 
 
