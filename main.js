@@ -65,7 +65,7 @@ function renderInventory(NFTs){
    // console.log(nft.metadata);
     let htmlString = `<div class="card" >
     <img class="card-img-top" src="${nft.metadata.result.data.image}" alt="Card image cap">
-      <a href="#" class="ggl2" onclick="Playgame('${nft.metadata.result.data.name}')">NEW CHALLENGER</a>
+      <a href="#" class="ggl2" onclick="Playgame('${nft.metadata.result.data.name}','${NFTs.length}')">NEW CHALLENGER</a>
   </div>`
   let col = document.createElement("div");
   col.className = "col col-md-3.5 mb-4 mt-4";
@@ -111,9 +111,14 @@ async function NFTGame(){
   renderInventory(NFTmeta);  
 }
 
-async function Playgame(nft){
+async function Playgame(nft,NFTlength){
   console.log(nft);
-
+  console.log(NFTlength);
+  r = Math.random(NFTlength);
+  if (r==nft)
+  r=
+  //Randomly select opponent (not fully secure until oracle is implemented)
+  
 }
 
 
