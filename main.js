@@ -57,7 +57,7 @@ console.log(nft.metadata);
 }
 function renderInventory(NFTs){
 
-  const parent =document.getElementById("app1");
+  const parent = document.getElementById("app1");
   
   for (let i = 0; i < NFTs.length; i++) {
    // console.log("renderinventy");
@@ -65,7 +65,7 @@ function renderInventory(NFTs){
    // console.log(nft.metadata);
     let htmlString = `<div class="card" >
     <img class="card-img-top" src="${nft.metadata.result.data.image}" alt="Card image cap">
-      <a href="#" class="ggl2" onclick="Playgame('${nft.metadata.result.data.name}','${NFTs.length}')">NEW CHALLENGER</a>
+      <a href="#" class="ggl2" onclick="Playgame('${nft.token_id}','${nft.metadata.result.data.name}','${NFTs.length}')">NEW CHALLENGER</a>
   </div>`
   let col = document.createElement("div");
   col.className = "col col-md-3.5 mb-4 mt-4";
@@ -84,7 +84,6 @@ async function NFTMarket(){
   let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
 //const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
  // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
-  
   console.log(NFTs);
   ///console.log(tokenMetadata.result);
   let NFTmeta = await fetchNFTMetadata(NFTs.result);
@@ -96,7 +95,7 @@ async function NFTMarket(){
 async function NFTGame(){
   $("#game").hide();
   $("#login_button").hide();
-  $("#logo1").hide(); /*change this when routing*/
+  $("#logo1").hide(); /* change this when routing */
   
   const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
   let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
@@ -111,16 +110,67 @@ async function NFTGame(){
   renderInventory(NFTmeta);  
 }
 
-async function Playgame(nft,NFTlength){
-  console.log(nft);
-  console.log(NFTlength);
-  r = Math.random(NFTlength);
-  if (r==nft)
-  r=
-  //Randomly select opponent (not fully secure until oracle is implemented)
+async function Playgame(nft,NFTName,NFTlength){
+  //console.log(nft);
+ //console.log(NFTName);
+  //console.log(NFTlength);
+
+ // let array1 = [NFTlength];
+ // let array2 = [NFTlength];
+ // for (let i = 0; i < NFTlength; i++)
+//{array1[i]=i}
+//for (let j = 0; j < NFTlength; j++)
+//{
+   // if (array1[j]==nft)
+     // {
+       // array2[j] = array1[j+1];
+      // j++;
+    // }
+    //  else
+   //  { array2[j] = array1[j];}
+   //  }
+    // console.log(array2);
+ // r = Math.random(array2);
+ // console.log(r);
+  min=0;
+  r = randomExcluded(min, NFTlength, nft);
   
+  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
+  let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
+  let NFTmeta = await fetchNFTMetadata(NFTs.result);
+  fetchNFTOMetadata(r,NFTmeta);
+  //Randomly select opponent (not fully secure until oracle is implemented) 
 }
 
+function randomExcluded(min, max, excluded) {
+  var n = Math.floor(Math.random() * (max-1) + min);
+  if (n >= excluded) n++;
+  console.log(n);
+  return n;
+}
+
+async function fetchNFTOMetadata(r,NFTs){
+  //$("#btn-logout").show(); 
+  let promises1 = [];
+  //console.log(NFTs.length)
+  //for (let i = 0; i < NFTs.length; i++) {
+    let nft = NFTs;
+    let id = r;
+  // call moralis clous fn ->static JSON file
+
+promises1.push(
+  fetch("https://cr7ge1kve9u7.moralishost.com:2053/server/functions/getNFT?_ApplicationId=EcXFhXVLhnGqUZNx9h8IyhtbZfwZCHYKbyIIlcZ3&nftId=" + id)
+// then(res => res.json())
+//.then(res => JSON.parse(res.result))
+.then(res1 => res1.json())
+//.then(res => JSON.parse(res.result))
+//.then(res => console.log(res.result.data))
+.then(res =>(nft.metadata = res1))
+.then(()=>{return nft;}))
+console.log(nft.meta);   
+  }
+  //return Promise.all(promises1);
+//}
 
 init();
 
