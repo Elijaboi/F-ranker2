@@ -135,10 +135,14 @@ async function Playgame(nft,NFTName,NFTlength){
   min=0;
   r = randomExcluded(min, NFTlength, nft);
   
-  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
-  let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
-  let NFTmeta = await fetchNFTMetadata(NFTs.result);
-  fetchNFTOMetadata(r,NFTmeta);
+  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
+ // const options = { address: "0xd...07", token_id: "1", chain: "bsc" };
+  //const tokenIdMetadata = await Moralis.Web3API.token.getTokenIdMetadata(options);
+
+  let NFTOmeta = await Moralis.Web3API.token.getTokenIdMetadata(options);
+  //let NFTmeta1 = await fetchNFTMetadata(NFTs.result);
+  console.log("got it", NFTOmeta)
+  fetchNFTOMetadata(r,NFTOmeta);
   //Randomly select opponent (not fully secure until oracle is implemented) 
 }
 
