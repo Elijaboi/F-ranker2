@@ -36,7 +36,7 @@ function renderGame(){
 async function fetchNFTMetadata(NFTs){
   $("#btn-logout").show(); 
   let promises = [];
-  //console.log(NFTs.length)
+  console.log(NFTs.name)
   for (let i = 0; i < NFTs.length; i++) {
     let nft = NFTs[i];
     let id = nft.token_id;
@@ -51,7 +51,7 @@ promises.push(
 //.then(res => console.log(res.result.data))
 .then(res =>(nft.metadata = res))
 .then(()=>{return nft;}))
-console.log(nft.metadata);   
+//console.log(nft.metadata);   
   }
   return Promise.all(promises);
 }
@@ -111,39 +111,15 @@ async function NFTGame(){
 }
 
 async function Playgame(nft,NFTName,NFTlength){
-  //console.log(nft);
- //console.log(NFTName);
-  //console.log(NFTlength);
-
- // let array1 = [NFTlength];
- // let array2 = [NFTlength];
- // for (let i = 0; i < NFTlength; i++)
-//{array1[i]=i}
-//for (let j = 0; j < NFTlength; j++)
-//{
-   // if (array1[j]==nft)
-     // {
-       // array2[j] = array1[j+1];
-      // j++;
-    // }
-    //  else
-   //  { array2[j] = array1[j];}
-   //  }
-    // console.log(array2);
- // r = Math.random(array2);
- // console.log(r);
   min=0;
   r = randomExcluded(min, NFTlength, nft);
-  
-  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
- // const options = { address: "0xd...07", token_id: "1", chain: "bsc" };
-  //const tokenIdMetadata = await Moralis.Web3API.token.getTokenIdMetadata(options);
-
+    const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
   let NFTOmeta = await Moralis.Web3API.token.getTokenIdMetadata(options);
-  //let NFTmeta1 = await fetchNFTMetadata(NFTs.result);
-  console.log("got it", NFTOmeta)
-  fetchNFTOMetadata(r,NFTOmeta);
+  console.log("got it", NFTOmeta.metadata.description)
   //Randomly select opponent (not fully secure until oracle is implemented) 
+  if (nft.metadata.result.data.heart>=NFTOmeta.metadata.result.data.heart)
+     red=nft;
+    let blue=NFTOmeta;
 }
 
 function randomExcluded(min, max, excluded) {
@@ -153,28 +129,6 @@ function randomExcluded(min, max, excluded) {
   return n;
 }
 
-async function fetchNFTOMetadata(r,NFTs){
-  //$("#btn-logout").show(); 
-  let promises1 = [];
-  //console.log(NFTs.length)
-  //for (let i = 0; i < NFTs.length; i++) {
-    let nft = NFTs;
-    let id = r;
-  // call moralis clous fn ->static JSON file
-
-promises1.push(
-  fetch("https://cr7ge1kve9u7.moralishost.com:2053/server/functions/getNFT?_ApplicationId=EcXFhXVLhnGqUZNx9h8IyhtbZfwZCHYKbyIIlcZ3&nftId=" + id)
-// then(res => res.json())
-//.then(res => JSON.parse(res.result))
-.then(res1 => res1.json())
-//.then(res => JSON.parse(res.result))
-//.then(res => console.log(res.result.data))
-.then(res =>(nft.metadata = res1))
-.then(()=>{return nft;}))
-console.log(nft.meta);   
-  }
-  //return Promise.all(promises1);
-//}
 
 init();
 
