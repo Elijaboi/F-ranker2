@@ -36,7 +36,7 @@ function renderGame(){
 async function fetchNFTMetadata(NFTs){
   $("#btn-logout").show(); 
   let promises = [];
-  console.log(NFTs.name)
+  //console.log("NFTs[n]",NFTs[1].metadata)
   for (let i = 0; i < NFTs.length; i++) {
     let nft = NFTs[i];
     let id = nft.token_id;
@@ -47,6 +47,8 @@ promises.push(
 // then(res => res.json())
 //.then(res => JSON.parse(res.result))
 .then(res => res.json())
+//.then(res => console.log("res.json",res.result.data.metadata.chin))
+//.then(res => console.log(res))
 //.then(res => JSON.parse(res.result))
 //.then(res => console.log(res.result.data))
 .then(res =>(nft.metadata = res))
@@ -54,6 +56,7 @@ promises.push(
 //console.log(nft.metadata);   
   }
   return Promise.all(promises);
+  console.log("promises",promises);
 }
 function renderInventory(NFTs){
 
@@ -84,7 +87,7 @@ async function NFTMarket(){
   let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
 //const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
  // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
-  console.log(NFTs);
+  console.log("NFTs:",NFTs);
   ///console.log(tokenMetadata.result);
   let NFTmeta = await fetchNFTMetadata(NFTs.result);
   //console.log(NFTmeta);
@@ -102,7 +105,7 @@ async function NFTGame(){
 //const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
  // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
   
-  console.log(NFTs);
+ // console.log("NFT.result",NFTs.result);
   ///console.log(tokenMetadata.result);
   let NFTmeta = await fetchNFTMetadata(NFTs.result);
   //console.log(NFTmeta);
@@ -113,13 +116,15 @@ async function NFTGame(){
 async function Playgame(nft,NFTName,NFTlength){
   min=0;
   r = randomExcluded(min, NFTlength, nft);
-    const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
+  const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
   let NFTOmeta = await Moralis.Web3API.token.getTokenIdMetadata(options);
-  console.log("got it", NFTOmeta.metadata.description)
+  const NFTO = JSON.parse(NFTOmeta.metadata); //Is this secure or can anyone see these attributes?
+  console.log("got it", NFTO);
+
   //Randomly select opponent (not fully secure until oracle is implemented) 
-  if (nft.metadata.result.data.heart>=NFTOmeta.metadata.result.data.heart)
-     red=nft;
-    let blue=NFTOmeta;
+ // if (nft.metadata.result.data.heart>=NFTOmeta.metadata.result.data.heart)
+  //   red=nft;
+    //let blue=NFTOmeta;
 }
 
 function randomExcluded(min, max, excluded) {
