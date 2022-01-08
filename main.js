@@ -58,17 +58,16 @@ promises.push(
   return Promise.all(promises);
   console.log("promises",promises);
 }
+
 function renderInventory(NFTs){
 
   const parent = document.getElementById("app1");
   
-  for (let i = 0; i < NFTs.length; i++) {
-   // console.log("renderinventy");
-    let nft = NFTs[i];
-   // console.log(nft.metadata);
-    let htmlString = `<div class="card" >
-    <img class="card-img-top" src="${nft.metadata.result.data.image}" alt="Card image cap">
-      <a href="#" class="ggl2" onclick="Playgame('${nft.token_id}','${nft.metadata.result.data.name}','${NFTs.length}')">NEW CHALLENGER</a>
+ for (let i = 0; i < NFTs.length; i++) {
+       let nft = NFTs[i];
+       let htmlString = `<div class="card" >
+   <img class="card-img-top" src="${nft.metadata.result.data.image}" alt="Card image cap">
+      <a href="#" class="ggl2" onclick="Playgame('${nft.token_id}','${NFTs.length}')">NEW CHALLENGER</a>
   </div>`
   let col = document.createElement("div");
   col.className = "col col-md-3.5 mb-4 mt-4";
@@ -78,6 +77,7 @@ function renderInventory(NFTs){
     
   }
 }
+
 async function NFTMarket(){
   $("#game").hide();
   $("#login_button").hide();
@@ -99,33 +99,42 @@ async function NFTGame(){
   $("#game").hide();
   $("#login_button").hide();
   $("#logo1").hide(); /* change this when routing */
-  
   const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
   let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
-//const tokenMetadata = await Moralis.Web3API.token.getTokenMetadata(options);
- // const tokenMetadata = await Moralis.Web3API.token.getTokenIdMetadata({ address: "0x918e8776743aaa9e04ea2fb6bb50baa11ee4c28b",token_id: "1", chain: "rinkeby" })
-  
- // console.log("NFT.result",NFTs.result);
-  ///console.log(tokenMetadata.result);
   let NFTmeta = await fetchNFTMetadata(NFTs.result);
-  //console.log(NFTmeta);
+  console.log(NFTmeta);
   $("#NFTdisp").show(); 
   renderInventory(NFTmeta);  
 }
 
-async function Playgame(nft,NFTName,NFTlength){
+async function Playgame(nft,NFTlength){
   min=0;
   r = randomExcluded(min, NFTlength, nft);
   const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
   let NFTOmeta = await Moralis.Web3API.token.getTokenIdMetadata(options);
   const NFTO = JSON.parse(NFTOmeta.metadata); //Is this secure or can anyone see these attributes?
   console.log("got it", NFTO);
-
+  const options2 = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: nft, chain: "rinkeby" };
+  let NFTCC = await Moralis.Web3API.token.getTokenIdMetadata(options2);
+  const NFTC = JSON.parse(NFTCC.metadata);
   //Randomly select opponent (not fully secure until oracle is implemented) 
- // if (nft.metadata.result.data.heart>=NFTOmeta.metadata.result.data.heart)
-  //   red=nft;
-    //let blue=NFTOmeta;
+ console.log("NFTC.prop",NFTC);
+ //coinflip start
+ if (NFTO.skill>NFTC.skill)
+ {
+   let red=NFTO;
+   let blue=NFTC;
+   console.log("red=",red,"blue=",blue);
+ }
+ else 
+ {
+   let red=NFTC;
+   let blue =NFTO;
+   console.log("red=",red,"blue=",blue);
 }
+//else randomly assign
+ }
+ 
 
 function randomExcluded(min, max, excluded) {
   var n = Math.floor(Math.random() * (max-1) + min);
