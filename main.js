@@ -58,8 +58,39 @@ promises.push(
   return Promise.all(promises);
   console.log("promises",promises);
 }
+function renderInventory(NFTs) {
+  const parent = document.querySelector("#app1");
 
-function renderInventory(NFTs){
+  for (const NFT of NFTs) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const image = document.createElement("img");
+      image.src = NFT.metadata.result.data.image;
+      image.className = "card-img-top";
+      image.alt = "Card image cap";
+
+      const playBtn = document.createElement("a");
+      playBtn.textContent = "NEW CHALLENGER";
+      playBtn.className = "ggl2";
+      playBtn.href = "#";
+
+      playBtn.addEventListener("click", function(event) {
+          Playgame(`${NFT.token_id}`, NFT.metadata.result.data, `${NFTs.length}`);
+      });
+
+      card.appendChild(image);
+      card.appendChild(playBtn);
+
+      const column = document.createElement("div");
+      column.className = "col col-md-3.5 mb-4 mt-4";
+
+      column.appendChild(card);
+
+      parent.appendChild(column);
+  }
+}
+function renderInventory2(NFTs){
 
   const parent = document.getElementById("app1");
   
@@ -107,18 +138,18 @@ async function NFTGame(){
   renderInventory(NFTmeta);  
 }
 
-async function Playgame(nft,NFTlength){
+async function Playgame(nft,NFTC,NFTlength){
   min=0;
   r = randomExcluded(min, NFTlength, nft);
   const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
   let NFTOmeta = await Moralis.Web3API.token.getTokenIdMetadata(options);
   const NFTO = JSON.parse(NFTOmeta.metadata); //Is this secure or can anyone see these attributes?
   console.log("got it", NFTO);
-  const options2 = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: nft, chain: "rinkeby" };
-  let NFTCC = await Moralis.Web3API.token.getTokenIdMetadata(options2);
-  const NFTC = JSON.parse(NFTCC.metadata);
+ // const options2 = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: nft, chain: "rinkeby" };
+ // let NFTCC = await Moralis.Web3API.token.getTokenIdMetadata(options2);
+ // const NFTC = JSON.parse(NFTCC.metadata);
   //Randomly select opponent (not fully secure until oracle is implemented) 
- console.log("NFTC.prop",NFTC);
+ console.log("NFTC.prop",NFTC.chin);
  //coinflip start
  if (NFTO.skill>NFTC.skill)
  {
