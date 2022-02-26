@@ -80,13 +80,25 @@ async function create ()
  player = this.physics.add.sprite(380, 320, 'circle');
  //player2 = this.physics.add.sprite(80, 80, 'p2') //create the player sprite
     player.setScale(0.4);
-
+    cursors = this.input.keyboard.createCursorKeys(); 
+    item1.setInteractive().on('pointerover', function() {item1.setTint(0x39FF14)});
+    item1.setInteractive().on('pointerout', function() {item1.setTint()});
+    W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);  
+    this.input.keyboard.on('keydown-M', function (event) {
+      player.angle += 45;
+                                                         }); 
+    this.input.keyboard.on('keydown-Q', function (event) {
+      player2.angle += 45;
+                                                         });
     let query = new Moralis.Query('Playerpos');
 let subscription = await query.subscribe();
 subscription.on('create', (plocation) => {
 if(plocation.get("player")!=user.get("ethAddress")){
     if(opponent[plocation.get("player")]==undefined){
-        opponent[plocation.get("player")]= this.add.image(300,400,'p2').setScale(0.4);
+        opponent[plocation.get("player")]= this.add.image(plocation.get("x"),plocation.get("y"),'p2').setScale(0.4);
     }
     else
     {
@@ -97,32 +109,9 @@ if(plocation.get("player")!=user.get("ethAddress")){
     console.log('someone moved');
 
 
-     }});
-
-
-    //player2.setScale(0.4);
-   // var emitter = particles.createEmitter({
-      //  speed: 100,
-      //  scale: { start: 1, end: 0 },
-       // blendMode: 'ADD'
-   // });    
-   item1.setInteractive().on('pointerover', function() {item1.setTint(0x39FF14)});
-   item1.setInteractive().on('pointerout', function() {item1.setTint()});
-   W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-   A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-   S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-   D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-   cursors = this.input.keyboard.createCursorKeys(); 
-   // turn=0;
-   // isRightDown = cursors.right.isDown;  
-
-   this.input.keyboard.on('keydown-M', function (event) {
-     player.angle += 45;
-                                                        }); 
-   this.input.keyboard.on('keydown-Q', function (event) {
-     player2.angle += 45;
-                                                        });
-   if(Math.hypot(player.x, player.y) < 100)
+     }});   
+  
+   if(Math.hypot(player.x, opponent.y) < 100)
 {
     console.log("proximity");
 player.add.tween(sprite.scale).to( { x: 2, y: 2 }, 2000, Phaser.Easing.Linear.None, true);
@@ -204,7 +193,10 @@ if(player.lastX!=player.x || player.lastY!=player.y || player.lastr!=player.angl
     player.lastY=player.y;
     player.lastr=player.angle;
     await playerpos.save();
+    
 }
+
+
 
 
 }

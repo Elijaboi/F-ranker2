@@ -20,4 +20,9 @@ if(turn%2!=0){
     }                                                                                                 
     else {
     player2.setVelocityY(0);                                                            
-    }}}
+    }}
+
+
+
+
+}
