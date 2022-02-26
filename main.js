@@ -1,6 +1,9 @@
+$("#topf").hide();
+$("#btn-logout").hide();
+var user;
 Moralis.start({ serverUrl: "https://cr7ge1kve9u7.moralishost.com:2053/server", appId: "EcXFhXVLhnGqUZNx9h8IyhtbZfwZCHYKbyIIlcZ3" });
 async function init() {
-  let user = Moralis.User.current();
+  user = Moralis.User.current();
   console.log(user);
   if (user) {
     renderGame();
@@ -22,13 +25,18 @@ async function logOut() {
     $("#login_button").show();
     $("#logo1").show();
     $("#game").hide();
-    console.log("logged out");
+    location.reload();
+    //$("#app1").hide();
+   // $("#btn-logout").hide();
+   // console.log("logged out");
   }
 
 function renderGame(){
     $("#game").show();
     $("#login_button").hide();
     $("#logo1").hide();
+    $("#topf").hide();
+    $("#btn-logout").show();
      /*change this when routing*/
 
 }
@@ -77,6 +85,10 @@ function renderInventory(NFTs) {
 
       playBtn.addEventListener("click", function(event) {
           Playgame(`${NFT.token_id}`, NFT.metadata.result.data, `${NFTs.length}`);
+          
+          $("#btn-logout").show();
+          $("#app1").hide();
+
       });
 
       card.appendChild(image);
@@ -113,6 +125,7 @@ async function NFTMarket(){
   $("#game").hide();
   $("#login_button").hide();
   $("#logo1").hide(); /*change this when routing*/
+  $("#topf").hide();
   
   const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b", chain: "rinkeby" };
   let NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
@@ -135,10 +148,12 @@ async function NFTGame(){
   let NFTmeta = await fetchNFTMetadata(NFTs.result);
   console.log(NFTmeta);
   $("#NFTdisp").show(); 
+  $("#topf").hide();
   renderInventory(NFTmeta);  
 }
 
 async function Playgame(nft,NFTC,NFTlength){
+  $("#topf").show();
   min=0;
   r = randomExcluded(min, NFTlength, nft);
   const options = { address: "0x26Be870A5c9f45D5b2eEb247bCB19452c623D84b",token_id: r, chain: "rinkeby" };
@@ -174,6 +189,7 @@ else
    let blue =NFTO;
    console.log("red=",red,"blue=",blue);
 }
+
 }
 //else randomly assign
 
@@ -182,7 +198,7 @@ else
 function randomExcluded(min, max, excluded) {
   var n = Math.floor(Math.random() * (max-1) + min);
   if (n >= excluded) n++;
-  console.log(n);
+ // console.log(n);
   return n;
 }
 
