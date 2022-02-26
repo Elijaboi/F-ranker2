@@ -157,14 +157,26 @@ async function Playgame(nft,NFTC,NFTlength){
    let blue=NFTC;
    console.log("red=",red,"blue=",blue);
  }
- else 
+else if (NFTO.skill=NFTC.skill)
+  {
+    c= Math.round(Math.random());
+    if(c){
+      let red=NFTC;
+      let blue =NFTO;
+  }else{
+    let red=NFTO;
+    let blue =NFTC;
+  }
+  }
+else 
  {
    let red=NFTC;
    let blue =NFTO;
    console.log("red=",red,"blue=",blue);
 }
+}
 //else randomly assign
- }
+
  
 
 function randomExcluded(min, max, excluded) {
