@@ -27,12 +27,15 @@ var player;
 var opponent = {};
 var obstacles;
 var cursors;
+var oppmove=0;
+
+//var buttonsLocked = {}
 
 var yLimit;
 var xLimit;
 
 let turn=0;
- user = Moralis.User.current();
+ //user = Moralis.User.current();
 //(function launch(){
   //  let user = Moralis.User.current();
     //if (!user){
@@ -57,6 +60,7 @@ function preload ()
     this.load.image('p2', 'assets/player2.png');
     this.load.image('grey_tile', 'assets/grey_tile.png');   
     this.load.image('nft','assets/ngannou.png');
+   // ping();
 }
 
 async function create ()
@@ -96,7 +100,7 @@ async function create ()
     let query = new Moralis.Query('Playerpos');
 let subscription = await query.subscribe();
 subscription.on('create', (plocation) => {
-if(plocation.get("player")!=user.get("ethAddress")){
+    if(plocation.get("player")!=user.get("ethAddress")){
     if(opponent[plocation.get("player")]==undefined){
         opponent[plocation.get("player")]= this.add.image(plocation.get("x"),plocation.get("y"),'p2').setScale(0.4);
     }
@@ -106,26 +110,36 @@ if(plocation.get("player")!=user.get("ethAddress")){
         opponent[plocation.get("player")].y=plocation.get("y");
         opponent[plocation.get("player")].angle=plocation.get("r");
     }
-    console.log('someone moved');
+    console.log('someone moved'+ + oppmove);
 
 
      }});   
-  
-   if(Math.hypot(player.x, opponent.y) < 100)
-{
-    console.log("proximity");
-player.add.tween(sprite.scale).to( { x: 2, y: 2 }, 2000, Phaser.Easing.Linear.None, true);
-}
+ // console.log(Math.hypot(player.x, opponent[plocation.get("player")].y));
+ //  if(Math.hypot(player.x, opponent[plocation.get("player")].y) < 100)
+//{
+   // console.log("proximity");
+//player.add.tween(sprite.scale).to( { x: 2, y: 2 }, 2000, Phaser.Easing.Linear.None, true);
+//console.log(oppmove);
+//}
 
 }
 async function  update ()
-{
+{ //const params =  { cursors: cursors };
     //if (turn%2==0){
-if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) { 
-player.body.x -= 50;
-turn++;
+        //try this one first
 
-                                                         }
+//if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) { 
+//player.body.x -= 50;
+//turn++;}
+if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) { 
+    
+    //if(!buttonsLocked["left"]){
+      //  console.log('A is pressed');
+        //buttonsLocked["up"]=true;
+        await Moralis.Cloud.run("move", {direction:"up"});
+       // buttonsLocked["up"]=false;
+    }
+    
 else if (Phaser.Input.Keyboard.JustDown(cursors.right) && player.x <= xLimit) {
 player.body.x += 50;
 turn++;                                                                       
@@ -142,7 +156,7 @@ turn++;
 }                                                                                                 
 else {player.setVelocityY(0);                                                            }
 //}
-
+//drawState();
 
 if (Math.hypot(player.x, player.y) < 100){
     console.log("hit");
@@ -183,16 +197,20 @@ else {item1.setTint();}
    
 if(player.lastX!=player.x || player.lastY!=player.y || player.lastr!=player.angle){
     let user =Moralis.User.current();
+    //oppmove++;
+    if(user){
     const Playerpos = Moralis.Object.extend("Playerpos");
     const playerpos = new Playerpos();
     playerpos.set("player", user.get("ethAddress"));
     playerpos.set("x",player.x);
     playerpos.set("y",player.y);
     playerpos.set("r",player.angle);
+    playerpos.set("oppmove",oppmove);
     player.lastX=player.x;
     player.lastY=player.y;
     player.lastr=player.angle;
-    await playerpos.save();
+    //console.log(oppmove);
+    await playerpos.save();}
     
 }
 
@@ -200,4 +218,11 @@ if(player.lastX!=player.x || player.lastY!=player.y || player.lastr!=player.angl
 
 
 }
+
+//async function ping(){
+  //  setTimeout(ping,1000)
+ ///   await Moralis.Cloud.run("ping");
+//}
+
+
 
