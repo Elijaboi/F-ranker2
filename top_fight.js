@@ -28,12 +28,13 @@ var opponent = {};
 var obstacles;
 var cursors;
 var oppmove=0;
+var state={};
 
 //var buttonsLocked = {}
 
 var yLimit;
 var xLimit;
-
+var context;
 let turn=0;
  //user = Moralis.User.current();
 //(function launch(){
@@ -55,12 +56,13 @@ function preload ()
     //url: 'rexuiplugin.min.js',
     //sceneKey: 'rexUI'
     //})
+    context = this;
     this.load.image('sky', 'assets/octagon.jpg');
     this.load.image('circle', 'assets/circle.png');
     this.load.image('p2', 'assets/player2.png');
     this.load.image('grey_tile', 'assets/grey_tile.png');   
     this.load.image('nft','assets/ngannou.png');
-   // ping();
+    ping();
 }
 
 async function create ()
@@ -97,23 +99,31 @@ async function create ()
     this.input.keyboard.on('keydown-Q', function (event) {
       player2.angle += 45;
                                                          });
-    let query = new Moralis.Query('Playerpos');
-let subscription = await query.subscribe();
-subscription.on('create', (plocation) => {
-    if(plocation.get("player")!=user.get("ethAddress")){
-    if(opponent[plocation.get("player")]==undefined){
-        opponent[plocation.get("player")]= this.add.image(plocation.get("x"),plocation.get("y"),'p2').setScale(0.4);
-    }
-    else
-    {
-        opponent[plocation.get("player")].x=plocation.get("x");
-        opponent[plocation.get("player")].y=plocation.get("y");
-        opponent[plocation.get("player")].angle=plocation.get("r");
-    }
-    console.log('someone moved'+ + oppmove);
+    //let query = new Moralis.Query('Playerpos');
+//let subscription = await query.subscribe();
+//subscription.on('create', (plocation) => {
+    //if(plocation.get("player")!=user.get("ethAddress")){
+    //if(opponent[plocation.get("player")]==undefined){
+     //   opponent[plocation.get("player")]= this.add.image(plocation.get("x"),plocation.get("y"),'p2').setScale(0.4);
+   // }
+    //else
+    //{
+      //  opponent[plocation.get("player")].x=plocation.get("x");
+        //opponent[plocation.get("player")].y=plocation.get("y");
+        //opponent[plocation.get("player")].angle=plocation.get("r");
+   // }
+    //console.log('someone moved'+ + oppmove);
 
 
-     }});   
+     //}});   
+     let query = new Moralis.Query("GameState");
+      let subscription = await query.subscribe();
+      query.equalTo("stateType", "globalGameState");
+      subscription.on('update', (object) => {
+        state = object.get("state");
+        console.log("The updated state is",state);
+      });
+     state = await Moralis.Cloud.run("getState");
  // console.log(Math.hypot(player.x, opponent[plocation.get("player")].y));
  //  if(Math.hypot(player.x, opponent[plocation.get("player")].y) < 100)
 //{
@@ -136,22 +146,25 @@ if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) {
     //if(!buttonsLocked["left"]){
       //  console.log('A is pressed');
         //buttonsLocked["up"]=true;
-        await Moralis.Cloud.run("move", {direction:"up"});
+        await Moralis.Cloud.run("move", {direction:"left"});
        // buttonsLocked["up"]=false;
     }
     
 else if (Phaser.Input.Keyboard.JustDown(cursors.right) && player.x <= xLimit) {
-player.body.x += 50;
+  await Moralis.Cloud.run("move", {direction:"right"});
+//player.body.x += 50;
 turn++;                                                                       
                                                                   }
 //else {player.setVelocityX(0);  }
 
-if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.y >=0) {                                                                                
-player.body.y -= 50;
+if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.y >=0) {  
+  await Moralis.Cloud.run("move", {direction:"up"});                                                                              
+//player.body.y -= 50;
 turn++;
 }
-else  if (Phaser.Input.Keyboard.JustDown(cursors.down) && player.y <=yLimit) {                                                                           
-player.body.y += 50;
+else  if (Phaser.Input.Keyboard.JustDown(cursors.down) && player.y <=yLimit) {     
+  await Moralis.Cloud.run("move", {direction:"down"});                                                                      
+//player.body.y += 50;
 turn++;
 }                                                                                                 
 else {player.setVelocityY(0);                                                            }
@@ -194,35 +207,76 @@ else {item1.setTint();}
 //{
 //player.setScale(turn++);
 //}
-   
-if(player.lastX!=player.x || player.lastY!=player.y || player.lastr!=player.angle){
-    let user =Moralis.User.current();
+   //**WORKING DOUBLE LOAD OF OPP AND PLAYR SAVE FOR ACTIONS**//
+//if(player.lastX!=player.x || player.lastY!=player.y || player.lastr!=player.angle){
+  //  let user =Moralis.User.current();
     //oppmove++;
-    if(user){
-    const Playerpos = Moralis.Object.extend("Playerpos");
-    const playerpos = new Playerpos();
-    playerpos.set("player", user.get("ethAddress"));
-    playerpos.set("x",player.x);
-    playerpos.set("y",player.y);
-    playerpos.set("r",player.angle);
-    playerpos.set("oppmove",oppmove);
-    player.lastX=player.x;
-    player.lastY=player.y;
-    player.lastr=player.angle;
+    //if(user){
+    //const Playerpos = Moralis.Object.extend("Playerpos");
+    //const playerpos = new Playerpos();
+    //playerpos.set("player", user.get("ethAddress"));
+    //playerpos.set("x",player.x);
+    //playerpos.set("y",player.y);
+    //playerpos.set("r",player.angle);
+    //playerpos.set("oppmove",oppmove);
+    //player.lastX=player.x;
+    //player.lastY=player.y;
+    //player.lastr=player.angle;
     //console.log(oppmove);
-    await playerpos.save();}
+    //await playerpos.save();}
+    drawState();
     
-}
-
-
-
-
-}
-
-//async function ping(){
-  //  setTimeout(ping,1000)
- ///   await Moralis.Cloud.run("ping");
 //}
+}
+async function ping(){
+    setTimeout(ping,1000)
+    await Moralis.Cloud.run("ping");
+  }
+
+  function drawState(){
+
+    console.log("This is the state",JSON.stringify(state));
+    for (let userId in state) { 
+
+      // new player that we haven't seen - need to load image, create sprite
+      if(!player[userId]){
+
+        player[userId] = {loading:true}
+
+       // const svgBlob = new Blob([state[userId].svg], {type:"image/svg+xml;charset=utf-8"})
+        //const url = URL.createObjectURL(svgBlob)
+
+       // context.load.image('player'+userId,url).on('filecomplete', function(){
+         // if(sprites[userId].loading)
+          //{
+            //sprites[userId].loading = false
+            //setTimeout(function(){ //had to add this delay for images to always show
+            opponent[userId]= context.physics.add.sprite(state[userId].x, state[userId].y,'p2').setScale(0.4);
+            //  sprites[userId] =  context.physics.add.image(state[userId].x, state[userId].y, 'player'+userId).setScale(0.5,0.5).setOrigin(0,0);
+            //},1000)
+          //}
+        }//, context);
+        //context.load.start()
+     // }
+      // existing player - just move around existing sprite
+      else{
+
+        if(player[userId].x<state[userId].x)
+          player[userId].x+=5;
+
+        else if(player[userId].x>state[userId].x)
+            player[userId].x-=5;
 
 
+
+        if(player[userId].y<state[userId].y)
+            player[userId].y+=5;
+
+        else if(player[userId].y>state[userId].y)
+            player[userId].y-=5;
+
+      }
+    }
+
+  }
 
