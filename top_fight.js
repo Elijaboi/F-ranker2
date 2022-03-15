@@ -29,6 +29,7 @@ var obstacles;
 var cursors;
 var oppmove=0;
 var state={};
+var sprites = [];
 
 //var buttonsLocked = {}
 
@@ -58,8 +59,8 @@ function preload ()
     //})
     context = this;
     this.load.image('sky', 'assets/octagon.jpg');
-    this.load.image('circle', 'assets/circle.png');
-    this.load.image('p2', 'assets/player2.png');
+   // this.load.image('circle', 'assets/circle.png');
+   // this.load.image('p2', 'assets/player2.png');
     this.load.image('grey_tile', 'assets/grey_tile.png');   
     this.load.image('nft','assets/ngannou.png');
     ping();
@@ -83,22 +84,23 @@ async function create ()
  xLimit = background.displayWidth; //the player cannot go beyond these x and
  yLimit = background.displayHeight;
     //var particles = this.add.particles('circle');
- player = this.physics.add.sprite(380, 320, 'circle');
+ //player = this.physics.add.sprite(380, 320, 'circle');
  //player2 = this.physics.add.sprite(80, 80, 'p2') //create the player sprite
-    player.setScale(0.4);
-    cursors = this.input.keyboard.createCursorKeys(); 
+   // player.setScale(0.4);
+    
+   cursors = this.input.keyboard.createCursorKeys(); 
     item1.setInteractive().on('pointerover', function() {item1.setTint(0x39FF14)});
     item1.setInteractive().on('pointerout', function() {item1.setTint()});
     W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);  
-    this.input.keyboard.on('keydown-M', function (event) {
-      player.angle += 45;
-                                                         }); 
-    this.input.keyboard.on('keydown-Q', function (event) {
-      player2.angle += 45;
-                                                         });
+   // this.input.keyboard.on('keydown-M', function (event) {
+  //    player.angle += 45;
+   //                                                      }); 
+   // this.input.keyboard.on('keydown-Q', function (event) {
+   //   player2.angle += 45;
+    //                                                     });
     //let query = new Moralis.Query('Playerpos');
 //let subscription = await query.subscribe();
 //subscription.on('create', (plocation) => {
@@ -141,8 +143,8 @@ async function  update ()
 //if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) { 
 //player.body.x -= 50;
 //turn++;}
-if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) { 
-    
+if (Phaser.Input.Keyboard.JustDown(cursors.left) ) { 
+    //&& player.x <= xLimit
     //if(!buttonsLocked["left"]){
       //  console.log('A is pressed');
         //buttonsLocked["up"]=true;
@@ -150,57 +152,57 @@ if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) {
        // buttonsLocked["up"]=false;
     }
     
-else if (Phaser.Input.Keyboard.JustDown(cursors.right) && player.x <= xLimit) {
+else if (Phaser.Input.Keyboard.JustDown(cursors.right) ) {//&& player.x <= xLimit
   await Moralis.Cloud.run("move", {direction:"right"});
 //player.body.x += 50;
 turn++;                                                                       
                                                                   }
 //else {player.setVelocityX(0);  }
 
-if (Phaser.Input.Keyboard.JustDown(cursors.up) && player.y >=0) {  
+if (Phaser.Input.Keyboard.JustDown(cursors.up) ) {//&& player.y >=0
   await Moralis.Cloud.run("move", {direction:"up"});                                                                              
 //player.body.y -= 50;
 turn++;
 }
-else  if (Phaser.Input.Keyboard.JustDown(cursors.down) && player.y <=yLimit) {     
+else  if (Phaser.Input.Keyboard.JustDown(cursors.down) ) {  //   && player.y <=yLimit
   await Moralis.Cloud.run("move", {direction:"down"});                                                                      
 //player.body.y += 50;
 turn++;
 }                                                                                                 
-else {player.setVelocityY(0);                                                            }
+//else {player.setVelocityY(0);                                                            }
 //}
 //drawState();
 
-if (Math.hypot(player.x, player.y) < 100){
-    console.log("hit");
-    this.tweens.add({
-        targets: image,
+//if (Math.hypot(player.x, player.y) < 100){
+  //  console.log("hit");
+   // this.tweens.add({
+     //   targets: image,
        // setAlpha:1,
-        scaleX: 2,
-        scaleY: 2,
-        ease: 'Power1',
-        duration: 3000
-    });
-}
-if(Phaser.Math.Distance.Chebyshev(player.x,player.y,opponent.x,opponent.y)<100)
-{//console.log(Phaser.VERSION);
-    nft.setPosition(player.x,player.y);
+       // scaleX: 2,
+       // scaleY: 2,
+       // ease: 'Power1',
+       // duration: 3000
+    //});
+//}
+//if(Phaser.Math.Distance.Chebyshev(player.x,player.y,opponent.x,opponent.y)<100)
+//{//console.log(Phaser.VERSION);
+  //  nft.setPosition(player.x,player.y);
 
-    this.tweens.add({
-        targets: nft,
-        alpha:1,
-        scaleX: 0.6,
-        scaleY: 0.6,
-        ease: 'Power1',
-        duration: 3000
-    });
-    zone = this.add.zone(nft.x+30, nft.y+180, 20, 20).setRectangleDropZone(50, 10);
+    //this.tweens.add({
+      //  targets: nft,
+        //alpha:1,
+        //scaleX: 0.6,
+        //scaleY: 0.6,
+        //ease: 'Power1',
+        //duration: 3000
+    //});
+    ///zone = this.add.zone(nft.x+30, nft.y+180, 20, 20).setRectangleDropZone(50, 10);
     //item1.setTint(0x39FF14);
    // player.add.tween(sprite.scale).to( { x: 2, y: 2 }, 2000, Phaser.Easing.Linear.None, true);
-   graphics = this.add.graphics();
-   graphics.lineStyle(2, 0xffff00);
-   graphics.strokeRect(zone.x - zone.input.hitArea.width / 2, zone.y - zone.input.hitArea.height / 2, zone.input.hitArea.width, zone.input.hitArea.height);
-}
+   //graphics = this.add.graphics();
+   //graphics.lineStyle(2, 0xffff00);
+   //graphics.strokeRect(zone.x - zone.input.hitArea.width / 2, zone.y - zone.input.hitArea.height / 2, zone.input.hitArea.width, zone.input.hitArea.height);
+//}
 else {item1.setTint();}
 
 //if(player)
@@ -233,50 +235,45 @@ async function ping(){
     await Moralis.Cloud.run("ping");
   }
 
-  function drawState(){
+       
+function drawState(){
 
-    console.log("This is the state",JSON.stringify(state));
-    for (let userId in state) { 
+      for (let userId in state) {
 
-      // new player that we haven't seen - need to load image, create sprite
-      if(!player[userId]){
+        // new player that we haven't seen - need to load image, create sprite
+        if(!sprites[userId]){
+          console.log("1.sprites[userId] not true");
+          sprites[userId] = {loading:true};
+          console.log("1.2 sprites[userId] ={loading:true}");
+          //const svgBlob = new Blob([state[userId].svg], {type:"image/svg+xml;charset=utf-8"})
+          //const url = URL.createObjectURL(svgBlob)
 
-        player[userId] = {loading:true}
+          context.load.image('circle', 'assets/circle.png').on('filecomplete', function(){
+            if(sprites[userId].loading)
+            {console.log("sprites[userId] is loading");
+              sprites[userId].loading = false;
+              setTimeout(function(){ //had to add this delay for images to always show
+                sprites[userId] =  context.physics.add.image(state[userId].x, state[userId].y, 'circle').setScale(0.5,0.5).setOrigin(0,0);
+              },1000)
+            }
+          }, context);
+          context.load.start()
+        }
+        // existing player - just move around existing sprite
+        else{
 
-       // const svgBlob = new Blob([state[userId].svg], {type:"image/svg+xml;charset=utf-8"})
-        //const url = URL.createObjectURL(svgBlob)
+          if(sprites[userId].x<state[userId].x)
+            sprites[userId].x+=5;
 
-       // context.load.image('player'+userId,url).on('filecomplete', function(){
-         // if(sprites[userId].loading)
-          //{
-            //sprites[userId].loading = false
-            //setTimeout(function(){ //had to add this delay for images to always show
-            opponent[userId]= context.physics.add.sprite(state[userId].x, state[userId].y,'p2').setScale(0.4);
-            //  sprites[userId] =  context.physics.add.image(state[userId].x, state[userId].y, 'player'+userId).setScale(0.5,0.5).setOrigin(0,0);
-            //},1000)
-          //}
-        }//, context);
-        //context.load.start()
-     // }
-      // existing player - just move around existing sprite
-      else{
+          else if(sprites[userId].x>state[userId].x)
+              sprites[userId].x-=5;
+              if(sprites[userId].y<state[userId].y)
+              sprites[userId].y+=5;
 
-        if(player[userId].x<state[userId].x)
-          player[userId].x+=5;
+          else if(sprites[userId].y>state[userId].y)
+              sprites[userId].y-=5;
 
-        else if(player[userId].x>state[userId].x)
-            player[userId].x-=5;
-
-
-
-        if(player[userId].y<state[userId].y)
-            player[userId].y+=5;
-
-        else if(player[userId].y>state[userId].y)
-            player[userId].y-=5;
-
+        }
       }
+
     }
-
-  }
-
