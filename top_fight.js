@@ -1,3 +1,4 @@
+//const Logger = require("nodemon/lib/utils/log");
 
 //import './dist/rexuiplugin.min.js'
 var config = {
@@ -59,6 +60,7 @@ function preload ()
     //})
     context = this;
     this.load.image('sky', 'assets/octagon.jpg');
+    context.load.image('circle', 'assets/circle.png');
    // this.load.image('circle', 'assets/circle.png');
    // this.load.image('p2', 'assets/player2.png');
     this.load.image('grey_tile', 'assets/grey_tile.png');   
@@ -69,6 +71,7 @@ function preload ()
 async function create ()
 {   var scene=this,
     background = this.add.image(0, 0, 'sky');
+   // console.log("un-updated state",state[userId]);
  item1 = this.add.image(380, 320, 'grey_tile');
  item2 = this.add.image(310, 320, 'grey_tile');
  item3 = this.add.image(450, 320, 'grey_tile');
@@ -136,42 +139,20 @@ async function create ()
 
 }
 async function  update ()
-{ //const params =  { cursors: cursors };
-    //if (turn%2==0){
-        //try this one first
-
-//if (Phaser.Input.Keyboard.JustDown(cursors.left) && player.x <= xLimit) { 
-//player.body.x -= 50;
-//turn++;}
+{ 
 if (Phaser.Input.Keyboard.JustDown(cursors.left) ) { 
-    //&& player.x <= xLimit
-    //if(!buttonsLocked["left"]){
-      //  console.log('A is pressed');
-        //buttonsLocked["up"]=true;
         await Moralis.Cloud.run("move", {direction:"left"});
-       // buttonsLocked["up"]=false;
-    }
-    
-else if (Phaser.Input.Keyboard.JustDown(cursors.right) ) {//&& player.x <= xLimit
-  await Moralis.Cloud.run("move", {direction:"right"});
-//player.body.x += 50;
-turn++;                                                                       
+    }    
+else if (Phaser.Input.Keyboard.JustDown(cursors.right) ) {
+  await Moralis.Cloud.run("move", {direction:"right"});                                                                    
                                                                   }
-//else {player.setVelocityX(0);  }
-
-if (Phaser.Input.Keyboard.JustDown(cursors.up) ) {//&& player.y >=0
+if (Phaser.Input.Keyboard.JustDown(cursors.up) ) {
   await Moralis.Cloud.run("move", {direction:"up"});                                                                              
-//player.body.y -= 50;
-turn++;
 }
-else  if (Phaser.Input.Keyboard.JustDown(cursors.down) ) {  //   && player.y <=yLimit
+else  if (Phaser.Input.Keyboard.JustDown(cursors.down) ) {  
   await Moralis.Cloud.run("move", {direction:"down"});                                                                      
-//player.body.y += 50;
-turn++;
 }                                                                                                 
-//else {player.setVelocityY(0);                                                            }
-//}
-//drawState();
+
 
 //if (Math.hypot(player.x, player.y) < 100){
   //  console.log("hit");
@@ -204,11 +185,6 @@ turn++;
    //graphics.strokeRect(zone.x - zone.input.hitArea.width / 2, zone.y - zone.input.hitArea.height / 2, zone.input.hitArea.width, zone.input.hitArea.height);
 //}
 else {item1.setTint();}
-
-//if(player)
-//{
-//player.setScale(turn++);
-//}
    //**WORKING DOUBLE LOAD OF OPP AND PLAYR SAVE FOR ACTIONS**//
 //if(player.lastX!=player.x || player.lastY!=player.y || player.lastr!=player.angle){
   //  let user =Moralis.User.current();
@@ -227,53 +203,47 @@ else {item1.setTint();}
     //console.log(oppmove);
     //await playerpos.save();}
     drawState();
-    
-//}
 }
 async function ping(){
     setTimeout(ping,1000)
     await Moralis.Cloud.run("ping");
-  }
-
-       
+  }    
 function drawState(){
 
-      for (let userId in state) {
-
-        // new player that we haven't seen - need to load image, create sprite
-        if(!sprites[userId]){
+  //console.log("drawstate called");
+      for (let userId in state)
+       { 
+        console.log("the userId in the state is :", state[userId]);
+        
+        if(!sprites[userId]){ 
           console.log("1.sprites[userId] not true");
           sprites[userId] = {loading:true};
           console.log("1.2 sprites[userId] ={loading:true}");
-          //const svgBlob = new Blob([state[userId].svg], {type:"image/svg+xml;charset=utf-8"})
-          //const url = URL.createObjectURL(svgBlob)
-
-          context.load.image('circle', 'assets/circle.png').on('filecomplete', function(){
             if(sprites[userId].loading)
-            {console.log("sprites[userId] is loading");
+            { console.log("sprites[userId] is loading");
               sprites[userId].loading = false;
-              setTimeout(function(){ //had to add this delay for images to always show
-                sprites[userId] =  context.physics.add.image(state[userId].x, state[userId].y, 'circle').setScale(0.5,0.5).setOrigin(0,0);
-              },1000)
+              console.log("state x and y is",state[userId].x,state[userId].y);
+              sprites[userId] =  context.physics.add.image(state[userId].x, state[userId].y, 'circle').setScale(0.5,0.5).setOrigin(0,0);
             }
-          }, context);
-          context.load.start()
-        }
-        // existing player - just move around existing sprite
+          }
         else{
-
           if(sprites[userId].x<state[userId].x)
-            sprites[userId].x+=5;
-
+         { console.log("sprites[userId].x<state[userId]");
+            sprites[userId].x+=5;  
+         }
           else if(sprites[userId].x>state[userId].x)
-              sprites[userId].x-=5;
+         { console.log("sprites[userId].x<state[userId]");
+              sprites[userId].x-=5;}
               if(sprites[userId].y<state[userId].y)
+              {console.log("sprites[userId].x<state[userId]");
               sprites[userId].y+=5;
-
+         }
           else if(sprites[userId].y>state[userId].y)
-              sprites[userId].y-=5;
+          {console.log("sprites[userId].x<state[userId]");
+              sprites[userId].y-=5;}
 
         }
-      }
+      } 
 
     }
+  
